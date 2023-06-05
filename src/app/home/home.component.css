@@ -1,0 +1,191 @@
+/* app-home.component.css */
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #4da1ff;
+    color: white;
+  }
+  
+  .logo h1 {
+    margin: 0;
+  }
+  
+  .user-info {
+    text-align: right;
+    color: black;
+  }
+  
+  .user-box {
+    background-color: #c6dfff;
+    padding: 10px;
+    width: 150px;
+  }
+  
+  .content {
+    margin-top: 20px;
+  }
+  
+  .post {
+    background-color: #f9f9f9;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .postHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .postHeader h2 {
+    margin: 0;
+  }
+
+  .postHeaderAuthor {
+    text-align: right;
+    color: black;
+  }
+
+  .postHeaderActions {
+    display: flex;
+    align-items: center;
+  }
+
+  .postHeaderActions button {
+    display: block;
+    width: max-content;
+    padding: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
+    background-color: #9c2b0f;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  
+  .postBody {
+    color: #555;
+  }
+
+  .postForm {
+  background-color: #f9f9f9;
+  padding: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.postForm form {
+  display: flex;
+  flex-direction: column;
+  
+}
+
+.postForm label {
+  margin-bottom: 5px;
+  margin-right: 10px;
+}
+
+.postForm input{
+  margin-left: 20px;
+  width: 40%;
+}
+.postForm textarea {
+  width: 80%;
+  height: 50px;
+  margin-left: 70px;
+  display: flex;
+}
+.postForm input,
+.postForm textarea {
+  margin-bottom: 10px;
+  padding: 5px;
+}
+
+.postList {
+  border-top: 1px solid #ccc;
+  padding-top: 20px;
+}
+
+.postList h3 {
+  margin-bottom: 5px;
+}
+
+.postList p {
+  margin-bottom: 15px;
+}
+
+.postForm button{
+  display: block;
+    width: 30%;
+    padding: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    align-self: self-end;
+}
+
+
+/* Estilos responsivos para dispositivos móveis */
+@media screen and (max-width: 380px) {
+  .container {
+    padding: 10px;
+  }
+
+  .header {
+    padding: 10px;
+  }
+
+  .logo h1 {
+    font-size: 18px;
+  }
+
+  .user-box {
+    width: 120px;
+  }
+
+  .post {
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+
+  .postForm {
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .postForm label {
+    margin-right: 5px;
+  }
+
+  .postForm input {
+    width: 60%;
+  }
+
+  .postForm textarea {
+    width: 100%;
+    height: 40px;
+    margin-left: 0;
+  }
+
+  .postForm button {
+    width: 40%;
+    padding: 8px;
+    margin-right: 5px;
+    margin-top: 8px;
+  }
+}

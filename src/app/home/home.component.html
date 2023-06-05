@@ -1,0 +1,86 @@
+      <!-- Cabeçalho da página home -->
+<div class="container">
+      <!--Cabeçalho-->
+    <div class="header">
+      <div class="logo">
+        <h1>Nome do Site</h1>
+      </div>
+      <div *ngIf="usuarioLogado" class="user-info">
+        <div class="user-box">
+          <h3>Bem vindo(a), {{usuarioLogado.nome}}</h3>
+          <p>{{usuarioLogado.email}}</p>
+        </div>
+      </div>
+    </div>
+     <!-- Formulário de criação de post -->
+  <div class="postForm">
+    <h2>Criar Post</h2>
+    <form [formGroup]="postForm" (submit)="criarPost()">
+      <div>
+        <label for="titulo">Título:</label>
+        <input type="text" id="titulo" formControlName="titulo" >
+      </div>
+      <div>
+        <label for="conteudo">Conteúdo:</label>
+        <textarea id="conteudo" formControlName="conteudo" ></textarea>
+      </div>
+      <button type="submit">Criar</button>
+    </form>
+  </div>
+
+
+      <!--Lista de posts-->
+<div class="postList">
+  <div *ngFor="let post of posts" class="post">
+    <div class="postHeader">
+      <div class="postHeaderInfo">
+        <h2>Título: {{ post.titulo }}</h2>
+        <p>data: {{ post.data }}</p>
+      </div>
+      <div class="postHeaderAuthor">
+        <p>Autor: {{ post.nomeUsuario }}</p>
+        <p>Email: {{ post.emailUsuario }}</p>
+      </div>
+      <div class="postHeaderActions">
+        <button (click)="excluirPost(post)">Excluir</button>
+      </div>
+    </div>
+    <div class="postBody">
+      <p>{{ post.texto }}</p>
+    </div>
+  </div>
+</div>
+
+
+    <!--<div class="content">
+      <div class="post">
+        <div class="post-header">
+          <div class="post-header-info">
+            <h2>Título da Postagem</h2>
+            <p>Data da Postagem</p>
+          </div>
+          <div class="post-header-author">
+            <p>Autor: " post.authorName "</p>
+            <p>Email: " post.authorEmail "</p>
+          </div>
+          <div class="post-header-actions">
+            <button >Excluir</button>
+          </div>
+        </div>
+        <div class="post-body">
+          <p>Conteúdo da Postagem</p>
+        </div>
+      </div>
+      <div class="post">
+        <div class="post-header">
+          <h2>Título da Postagem</h2>
+          <p>Data da Postagem</p>
+        </div>
+        <div class="post-body">
+          <p>Conteúdo da Postagem</p>
+        </div>
+      </div>
+    </div>-->
+  </div>
+
+  <app-chat></app-chat>
