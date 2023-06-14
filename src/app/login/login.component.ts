@@ -33,16 +33,16 @@ export class LoginComponent {
     if (this.form.valid) {
       const { email, password } = this.form.value;
 
-      console.log('Email:', email);
-      console.log('Senha:', password);
+      //console.log('Email:', email);
+      //console.log('Senha:', password);
 
       this.usuarioService.login(email, password).subscribe(
         (response: any) => {
           if (response.statusCode !== 401) {
-            console.log('Login efetuado com sucesso!', response);
+            console.log('Login efetuado com sucesso!');//console.log('Login efetuado com sucesso!', response);
 
             const usuarioLogado: Usuario = response.user;  // Supondo que a resposta do serviço de login retorne o usuário logado
-            console.log(usuarioLogado);
+            //console.log(usuarioLogado);
             this.usuarioLogadoService.setUsuarioLogado(usuarioLogado);            // Armazena o usuário logado no serviço
             localStorage.setItem('usuarioLogado', JSON.stringify(usuarioLogado)); // Armazena o usuário logado no localStorage
  

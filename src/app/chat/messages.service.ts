@@ -33,7 +33,7 @@ export class MessagesService {
   }
 
   newMessageToServer(message: Message): Observable<Message> {
-    console.log('newMessageToServer executado');
+    //console.log('newMessageToServer executado');
     return this.http.post<Message>(this.API_URL, message);
   }
 

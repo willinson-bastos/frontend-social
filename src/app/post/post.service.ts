@@ -21,7 +21,7 @@ export class PostService {
     }
 
     readAllPosts(): Observable<Post[]> {
-        console.log(`${this.API_URL}/posts`);
+      //  console.log(`${this.API_URL}/posts`);
         return this.http.get<Post[]>(`${this.API_URL}/posts`);
     }
 

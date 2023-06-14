@@ -67,7 +67,7 @@ export class ChatComponent implements OnInit {
       this.messagesService.newMessageToServer(message).subscribe(
         (response: Message) => {
           // Lógica a ser executada quando a resposta do servidor for recebida
-          console.log('Resposta do servidor:', response);
+          //console.log('Resposta do servidor:', response);
           // Outras ações, se necessário
         },
         (error) => {

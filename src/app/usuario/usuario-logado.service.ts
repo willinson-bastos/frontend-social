@@ -8,12 +8,12 @@ export class UsuarioLogadoService {
   private usuarioLogado!: Usuario;
 
   setUsuarioLogado(usuario: Usuario): void {
-    console.log('setUsuarioLogado');
+    //console.log('setUsuarioLogado');
     this.usuarioLogado = usuario;
   }
 
   getUsuarioLogado(): Usuario {
-    console.log('getUsuarioLogado');
+    //console.log('getUsuarioLogado');
     return this.usuarioLogado;
   }
 }

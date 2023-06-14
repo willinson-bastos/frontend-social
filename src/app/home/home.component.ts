@@ -43,6 +43,7 @@ export class HomeComponent implements OnInit {
 
 
   ngOnInit(): void {
+
     /*this.route.queryParams.subscribe(params => {
       const email = params['email'];
       this.usuarioService.readOneUsuarioByEmail(email).subscribe(
@@ -56,8 +57,11 @@ export class HomeComponent implements OnInit {
     });*/
     //this.obterUsuarioLogado();
     const usuarioRefresh = localStorage.getItem('usuarioLogado');
+
     if(usuarioRefresh){
       this.usuarioLogado = JSON.parse(usuarioRefresh);
+    }else{
+      this.router.navigate(['']);
     }
 
     if(!this.usuarioLogado){
@@ -82,7 +86,7 @@ export class HomeComponent implements OnInit {
   }*/
 
   async listarPosts(): Promise<void>{
-    console.log('executado listar post');
+    //console.log('executado listar post');
     this.postService.readAllPosts().subscribe(
       (posts: Post[]) => {
         this.posts = posts;
@@ -96,7 +100,7 @@ export class HomeComponent implements OnInit {
 
   criarPost() {
     if(this.usuarioLogado){
-    console.log('executado criar post',this.postForm);
+   // console.log('executado criar post',this.postForm);
     console.log('formulário válido? ',this.postForm.valid);
     if (this.postForm.valid) {
       console.log('entrou no: "if (this.form.valid)"');
@@ -228,7 +232,13 @@ export class HomeComponent implements OnInit {
     });
 
     if (confirmation.isConfirmed) {
+      localStorage.removeItem('usuarioLogado');
       this.usuarioLogado = null;
+      this.usuarioLogadoService.setUsuarioLogado({
+        id: 0,
+        nome: '',
+        email:''
+      });
       this.router.navigate(['']);
     }
 
