@@ -10,7 +10,7 @@ import { PostCriar } from './post.criar';
 })
 export class PostService {
 
-    private API_URL = 'http://localhost:3000/home'
+    private API_URL = 'http://localhost:3000/home';
 
     constructor(private http: HttpClient) { }
 

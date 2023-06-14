@@ -12,10 +12,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UsuarioService } from './usuario/usuario.service';
 import { HttpClientModule } from '@angular/common/http';
 import { PostService } from './post/post.service';
-
-import { SocketIoModule } from 'ngx-socket-io';
-import { ConversaComponent } from './chat/conversa/conversa.component';
-
+import { SocketIoModule} from 'ngx-socket-io';
+import { MessagesService } from './chat/messages.service';
 
 @NgModule({
   declarations: [
@@ -23,8 +21,7 @@ import { ConversaComponent } from './chat/conversa/conversa.component';
     LoginComponent,
     HomeComponent,
     CadastroComponent,
-    ChatComponent,
-    ConversaComponent
+    ChatComponent
   ],
   imports: [
     BrowserModule,
@@ -35,7 +32,7 @@ import { ConversaComponent } from './chat/conversa/conversa.component';
     HttpClientModule,
     SocketIoModule.forRoot({url: 'http://localhost:3000', options: {} } )
   ],
-  providers: [UsuarioService, PostService],
+  providers: [UsuarioService, PostService, MessagesService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
