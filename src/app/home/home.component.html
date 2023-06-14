@@ -1,5 +1,5 @@
       <!-- Cabeçalho da página home -->
-<div class="container">
+<div *ngIf="usuarioLogado != null"class="container">
       <!--Cabeçalho-->
     <div class="header">
       <div class="logo">
@@ -9,6 +9,7 @@
         <div class="user-box">
           <h3>Bem vindo(a), {{usuarioLogado.nome}}</h3>
           <p>{{usuarioLogado.email}}</p>
+          <button (click)="logout()">Logout</button> <!-- Botão de Logout  -->
         </div>
       </div>
     </div>
@@ -42,7 +43,7 @@
         <p>Email: {{ post.emailUsuario }}</p>
       </div>
       <div class="postHeaderActions">
-        <button (click)="excluirPost(post)">Excluir</button>
+        <button *ngIf="post.emailUsuario === usuarioLogado.email" (click)="excluirPost(post)">Excluir</button>
       </div>
     </div>
     <div class="postBody">

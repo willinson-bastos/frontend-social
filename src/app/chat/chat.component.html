@@ -12,7 +12,7 @@
       </div>
     </div>
     <div class="chat-footer">
-      <input type="text" placeholder="Digite sua mensagem" [(ngModel)]="newMessageContent">
+      <input type="text" placeholder="Digite sua mensagem" [(ngModel)]="newMessageContent" (keyup.enter)="sendMessage(newMessageContent)">
       <button (click)="sendMessage(newMessageContent)">Enviar</button>
     </div>
   </div>

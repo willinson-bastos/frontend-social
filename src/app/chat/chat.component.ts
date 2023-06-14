@@ -57,24 +57,27 @@ export class ChatComponent implements OnInit {
   }
  
   sendMessage(content: string): void {
+    
     const message: Message = {
       name: this.usuarioLogado.nome,
       text: content
     };
   
-    this.messagesService.newMessageToServer(message).subscribe(
-      (response: Message) => {
-        // Lógica a ser executada quando a resposta do servidor for recebida
-        console.log('Resposta do servidor:', response);
-        // Outras ações, se necessário
-      },
-      (error) => {
-        // Lógica a ser executada em caso de erro
-        console.error('Erro ao enviar mensagem para o servidor:', error);
-      }
-    );
-    this.messagesService.send(message);
-    this.newMessageContent = ''; // Limpar o conteúdo do campo de mensagem
+    if(message.text){
+      this.messagesService.newMessageToServer(message).subscribe(
+        (response: Message) => {
+          // Lógica a ser executada quando a resposta do servidor for recebida
+          console.log('Resposta do servidor:', response);
+          // Outras ações, se necessário
+        },
+        (error) => {
+          // Lógica a ser executada em caso de erro
+          console.error('Erro ao enviar mensagem para o servidor:', error);
+        }
+      );
+      this.messagesService.send(message);
+      this.newMessageContent = ''; // Limpar o conteúdo do campo de mensagem
+    }
   }
   
 }

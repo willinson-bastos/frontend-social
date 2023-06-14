@@ -22,11 +22,25 @@
     text-align: right;
     color: black;
   }
+
+  .user-info button{
+    display: flex;
+    width: 30%;
+    padding: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
+    background-color: #9c2b0f;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    align-self: self-start;
+  }
   
   .user-box {
     background-color: #c6dfff;
     padding: 10px;
-    width: 150px;
+    width: 200px;
   }
   
   .content {

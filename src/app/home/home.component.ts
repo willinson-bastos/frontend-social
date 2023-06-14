@@ -17,7 +17,7 @@ import { UsuarioLogadoService } from '../usuario/usuario-logado.service';
 })
 export class HomeComponent implements OnInit {
 
-  usuarioLogado!: Usuario;
+  usuarioLogado!: Usuario | null;
 
   postForm: FormGroup;
   posts: Post[] = [];
@@ -35,6 +35,10 @@ export class HomeComponent implements OnInit {
       titulo: ['', Validators.required],
       conteudo: ['', Validators.required]
     });
+  }
+
+  refreshPage() {
+    location.reload();
   }
 
 
@@ -137,7 +141,8 @@ export class HomeComponent implements OnInit {
             confirmButtonText: 'OK'
           }).then((result) => {
             if (result.value) {
-              this.router.navigate(['home']);
+              this.refreshPage();
+              //this.router.navigate(['home']);
             }
           });
         },
@@ -152,47 +157,82 @@ export class HomeComponent implements OnInit {
             confirmButtonText: 'OK',
           });
         }
-      )
+      );
 
       }
     }
   }
 
   async excluirPost(post: Post): Promise <void>{
-    console.log('executado excluir post');
 
+    const confirmation = await Swal.fire({
+    title: 'Confirmar exclusão',
+    text: 'Tem certeza de que deseja excluir esta postagem?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#007bff',
+    cancelButtonColor: '#dc3545',
+    confirmButtonText: 'Sim',
+    cancelButtonText: 'Cancelar',
+  });
 
-    this.postService.deletePost(post.id).subscribe(
-      () => {   
-        Swal.fire({
-          title: 'Postagem excluída',
-          text: '',
-          icon: 'success',
-          showCancelButton: false,
-          confirmButtonColor: '#007bff', 
-          confirmButtonText: 'OK'
-        }).then((result) => {
-          if (result.value) {
-            this.router.navigate(['home']);
+  if (confirmation.isConfirmed) {
+    console.log('Executando exclusão da postagem...');
+
+    if(this.usuarioLogado)
+      if(post.emailUsuario == this.usuarioLogado.email){
+        this.postService.deletePost(post.id).subscribe(
+          () => {   
+            Swal.fire({
+              title: 'Postagem excluída',
+              text: '',
+              icon: 'success',
+              showCancelButton: false,
+              confirmButtonColor: '#007bff', 
+              confirmButtonText: 'OK'
+            }).then((result) => {
+              if (result.value) {
+                this.refreshPage();
+                //this.router.navigate(['home']);
+              }
+            });
+          },
+          (error) => {
+            console.error('Erro ao efetuar postagem.', error);
+            Swal.fire({
+              title: 'Falha ao criar postagem',
+              text: '',
+              icon: 'error',
+              showCancelButton: false,
+              confirmButtonColor: '#007bff', 
+              confirmButtonText: 'OK',
+            });
           }
-        });
-      },
-      (error) => {
-        console.error('Erro ao efetuar postagem.', error);
-        Swal.fire({
-          title: 'Falha ao criar postagem',
-          text: '',
-          icon: 'error',
-          showCancelButton: false,
-          confirmButtonColor: '#007bff', 
-          confirmButtonText: 'OK',
-        });
+        );
+        
       }
-    )
-    
+    }
+
   }
 
+  async logout(){
+    const confirmation = await Swal.fire({
+      title: 'Logout',
+      text: 'Tem certeza de que deseja sair?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#007bff',
+      cancelButtonColor: '#dc3545',
+      confirmButtonText: 'Sair',
+      cancelButtonText: 'Cancelar',
+    });
 
+    if (confirmation.isConfirmed) {
+      this.usuarioLogado = null;
+      this.router.navigate(['']);
+    }
+
+  }
 
 
 }
