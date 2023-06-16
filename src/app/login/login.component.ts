@@ -42,7 +42,9 @@ export class LoginComponent {
             console.log('Login efetuado com sucesso!');//console.log('Login efetuado com sucesso!', response);
 
             const usuarioLogado: Usuario = response.user;  // Supondo que a resposta do serviço de login retorne o usuário logado
-            //console.log(usuarioLogado);
+            console.log(usuarioLogado);
+            const token: string = response.access_token;
+            console.log(token);
             this.usuarioLogadoService.setUsuarioLogado(usuarioLogado);            // Armazena o usuário logado no serviço
             localStorage.setItem('usuarioLogado', JSON.stringify(usuarioLogado)); // Armazena o usuário logado no localStorage
  

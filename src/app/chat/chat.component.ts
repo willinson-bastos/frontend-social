@@ -1,4 +1,154 @@
+
 import { Component, OnInit } from '@angular/core';
+import { MessagesService } from './messages.service';
+import { Message } from './message.entity';
+import { UsuarioLogadoService } from '../usuario/usuario-logado.service';
+import { Usuario } from '../usuario/usuario';
+import { UsuarioService } from '../usuario/usuario.service';
+
+@Component({
+  selector: 'app-chat',
+  templateUrl: './chat.component.html',
+  styleUrls: ['./chat.component.css']
+})
+export class ChatComponent implements OnInit {
+
+  usuarioLogado!: Usuario;
+  
+  messagesFromServer: Message[] =[];//usar na lista do servidor
+  messages: Message[] = []; //filtrar as mensagens desejadas
+  newMessageContent: string = '';
+
+
+  listaDeUsuariosComMensagem: Usuario[] = [];
+  listaDeUsuariosSemMensagem: Usuario[] = [];
+
+  selectedUser!: Usuario ;
+
+  showUserList: boolean = true;
+  showConversaContainer: boolean = false;
+  showChatBox: boolean = false;
+
+  constructor(
+    private messagesService: MessagesService,
+    private usuarioLogadoService: UsuarioLogadoService,
+    private usuarioService: UsuarioService
+  ) {}
+
+  ngOnInit(): void {
+    
+    const usuarioRefresh = localStorage.getItem('usuarioLogado');
+    if (usuarioRefresh) {
+      this.usuarioLogado = JSON.parse(usuarioRefresh);
+    }
+
+    if (!this.usuarioLogado) {
+      this.usuarioLogado = this.usuarioLogadoService.getUsuarioLogado();
+      console.log(this.usuarioLogado);
+    }
+
+    this.listServerMessages();
+    this.listServerUsers();
+    
+    this.messagesService.loginChat(this.usuarioLogado.id);
+    
+  }
+
+  toggleChatBox(): void {
+    this.showChatBox = !this.showChatBox;
+  }
+
+  async listServerUsers(){
+    this.usuarioService.readAllUsuarios().subscribe((usuarios: Usuario[]) => {
+      this.listaDeUsuariosComMensagem = usuarios.filter(user => user.id !== this.usuarioLogado.id && this.hasMessages(user));
+      this.listaDeUsuariosSemMensagem = usuarios.filter(user => user.id !== this.usuarioLogado.id && !this.hasMessages(user));
+    });
+  }
+
+  async listServerMessages(): Promise<void>{
+    console.log('listServerMessages');
+    this.messagesService.readMessagesFromServer().subscribe(
+      (messages: Message[]) => {
+        this.messagesFromServer = messages;
+      },
+      (error) => {
+        console.error('Erro ao carregar as mensagens:', error);
+      }
+    );
+  }
+
+  hasMessages(user: Usuario): boolean {
+    const hasMessages = this.messagesFromServer.some(message =>
+      (message.idSender === this.usuarioLogado.id && message.idReceiver === user.id) ||
+      (message.idSender === user.id && message.idReceiver === this.usuarioLogado.id)
+    );
+    return hasMessages;
+  }
+  
+
+  async filterMessagesList(){
+    this.messages = this.messagesFromServer.filter((message)=>
+      (message.idSender === this.usuarioLogado.id && message.idReceiver === this.selectedUser.id) || (message.idSender === this.selectedUser.id && message.idReceiver === this.usuarioLogado.id)
+    );
+  }
+
+  selectUser(usuario: Usuario): void {
+    
+    this.selectedUser = usuario;
+    console.log('selectUser'+ this.selectedUser.nome);
+    
+    if(!this.selectedUser) return ;
+
+    //chamar método para filtrar as mensagens (messagesFromServer => messages)
+    this.filterMessagesList();
+
+    this.showUserList = false;
+    this.showConversaContainer = true;
+
+    this.listenMessages();
+   
+  }
+
+  listenMessages(){
+    this.messagesService.listenMessage((message: Message) => {
+      if(message.idSender === this.selectedUser.id && message.idReceiver === this.usuarioLogado.id){
+        this.messages.push(message);
+        }
+
+    });
+  }
+  
+
+  sendMessage(newMessageContent: string): void {
+    this.newMessageContent = newMessageContent;
+    if (!this.newMessageContent) {
+      return;
+    }
+
+    if (this.newMessageContent) {
+      const message: Message = {
+        idSender: this.usuarioLogado.id,
+        idReceiver: this.selectedUser.id,
+        text: ("["+ this.usuarioLogado.nome +"]: "+this.newMessageContent)
+      };
+
+      this.messages.push(message);
+      this.messagesService.sendMessage(message);
+
+      this.newMessageContent = '';
+    }
+  }
+
+  goBackToList(): void {
+    this.showUserList = true;
+    this.showConversaContainer = false;
+    this.messages = [];
+  }
+}
+
+
+
+/*import { Component, OnInit } from '@angular/core';
 import { MessagesService } from './messages.service';
 import { Message } from './message.entity';
 import { UsuarioLogadoService } from '../usuario/usuario-logado.service';
@@ -81,130 +231,5 @@ export class ChatComponent implements OnInit {
   }
   
 }
+*/
 
-
-/*import { Component, OnInit } from '@angular/core';
-import { MessagesService } from './messages.service';
-import { Message } from './message.entity';
-import { UsuarioLogadoService } from '../usuario/usuario-logado.service';
-import { Usuario } from '../usuario/usuario';
-import { UsuarioService } from '../usuario/usuario.service';
-import { Socket } from 'ngx-socket-io';
-
-@Component({
-  selector: 'app-chat',
-  templateUrl: './chat.component.html',
-  styleUrls: ['./chat.component.css']
-})
-export class ChatComponent implements OnInit {
-  messages: Message[] = [];
-
-  newMessageContent: string = '';
-  createdRoomId: string = '';
-
-  listaDeUsuarios: Usuario[] = [];
-
-  usuarioLogado!: Usuario;
-  selectedUser!: Usuario ;
-
-  showUserList: boolean = true;
-  showConversaContainer: boolean = false;
-  showChatBox: boolean = false;
-
-  constructor(
-    private messagesService: MessagesService,
-    private usuarioLogadoService: UsuarioLogadoService,
-    private usuarioService: UsuarioService,
-    private socket: Socket
-  ) {}
-
-  ngOnInit(): void {
-    this.usuarioService.readAllUsuarios().subscribe((usuarios: Usuario[]) => {
-      this.listaDeUsuarios = usuarios.filter(user => user.id !== this.usuarioLogado.id);
-    });
-
-    const usuarioRefresh = localStorage.getItem('usuarioLogado');
-    if (usuarioRefresh) {
-      this.usuarioLogado = JSON.parse(usuarioRefresh);
-    }
-
-    if (!this.usuarioLogado) {
-      this.usuarioLogado = this.usuarioLogadoService.getUsuarioLogado();
-      console.log(this.usuarioLogado);
-    }
-
-    this.messagesService.receiveMessage$.subscribe((message: Message) => {
-      this.messages.push(message);
-    });
-  }
-
-  toggleChatBox(): void {
-    this.showChatBox = !this.showChatBox;
-  }
-
-  selectUser(usuario: Usuario): void {
-    this.selectedUser = usuario;
-    this.showUserList = false;
-    this.showConversaContainer = true;
-  
-    // Verificação de usuário logado e sala existente
-    if (this.selectedUser && this.createdRoomId) {
-      this.messagesService.leaveRoom(this.createdRoomId, this.usuarioLogado.id.toString());
-    }
-  
-    if (this.selectedUser?.id) { // Usando o operador de navegação segura (?)
-      // Verifique se a sala já existe
-      this.messagesService
-        .checkRoomExists(this.usuarioLogado.id.toString(), this.selectedUser.id.toString())
-        .subscribe((roomExists) => {
-          if (roomExists) {
-            // A sala já existe, então apenas junte-se a ela
-            this.messagesService.joinRoom(this.createdRoomId, this.usuarioLogado.id.toString());
-          } else {
-            // A sala não existe, crie uma nova sala e junte-se a ela
-            this.messagesService
-              .createRoom(this.usuarioLogado.id.toString(), this.selectedUser.id.toString())
-              .subscribe((roomId: string) => {
-                this.createdRoomId = roomId;
-                this.messagesService.joinRoom(this.createdRoomId, this.usuarioLogado.id.toString());
-              });
-          }
-        });
-    }
-  }
-  
-  
-
-  sendMessage(newMessageContent: string): void {
-    this.newMessageContent = newMessageContent;
-    if (!this.newMessageContent) {
-      return;
-    }
-
-    if (this.createdRoomId) {
-      const message: Message = {
-        roomId: this.createdRoomId,
-        name: this.usuarioLogado.id.toString(),
-        text: this.newMessageContent
-      };
-
-      this.messages.push(message);
-
-      this.messagesService.sendMessage(this.createdRoomId, this.usuarioLogado.id.toString(), this.newMessageContent);
-
-      this.newMessageContent = '';
-    }
-  }
-
-  goBackToList(): void {
-    this.showUserList = true;
-    this.showConversaContainer = false;
-
-    if (this.createdRoomId) {
-      this.messagesService.leaveRoom(this.createdRoomId, this.usuarioLogado.id.toString());
-    }
-
-    this.createdRoomId = '';
-    this.messages = [];
-  }
-}*/

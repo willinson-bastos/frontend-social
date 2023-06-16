@@ -1,5 +1,6 @@
 export interface Message {
+    idSender:number;
+    idReceiver: number;
     
-    name: string;
     text: string;
   }
