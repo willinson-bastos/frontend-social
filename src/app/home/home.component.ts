@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Post } from '../post/post';
 import { PostCriar } from '../post/post.criar';
 import { PostService } from '../post/post.service';
@@ -15,7 +15,7 @@ import { UsuarioLogadoService } from '../usuario/usuario-logado.service';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
 
   usuarioLogado!: Usuario | null;
 
@@ -89,7 +89,7 @@ export class HomeComponent implements OnInit {
     //console.log('executado listar post');
     this.postService.readAllPosts().subscribe(
       (posts: Post[]) => {
-        this.posts = posts;
+        this.posts = posts.reverse();
       },
       (error) => {
         console.error('Erro ao carregar os posts:', error);
@@ -242,6 +242,16 @@ export class HomeComponent implements OnInit {
       this.router.navigate(['']);
     }
 
+  }
+
+  ngOnDestroy(){
+    localStorage.removeItem('usuarioLogado');
+      this.usuarioLogado = null;
+      this.usuarioLogadoService.setUsuarioLogado({
+        id: 0,
+        nome: '',
+        email:''
+      });
   }
 
 

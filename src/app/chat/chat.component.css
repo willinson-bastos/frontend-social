@@ -84,6 +84,14 @@
   border-radius: 3px;
 }
 
+.chat-icon-new-messages {
+  color: red; /* Defina a cor desejada para o ícone do chat */
+}
+
+.user-message-sender {
+  background-color: yellow; /* Defina a cor de fundo desejada para o usuário */
+}
+
 .user-list {
   padding: 10px;
   cursor: pointer;

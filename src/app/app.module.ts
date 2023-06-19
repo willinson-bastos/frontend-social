@@ -14,6 +14,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { PostService } from './post/post.service';
 import { SocketIoModule} from 'ngx-socket-io';
 import { MessagesService } from './chat/messages.service';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { MessagesService } from './chat/messages.service';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    ToastrModule.forRoot(),
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
