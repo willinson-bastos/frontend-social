@@ -44,18 +44,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    /*this.route.queryParams.subscribe(params => {
-      const email = params['email'];
-      this.usuarioService.readOneUsuarioByEmail(email).subscribe(
-        (usuario: Usuario) => {
-          this.usuarioLogado = usuario;
-        },
-        (error) => {
-          console.error('Erro ao buscar o usuário:', error);
-        }
-      );
-    });*/
-    //this.obterUsuarioLogado();
     const usuarioRefresh = localStorage.getItem('usuarioLogado');
 
     if(usuarioRefresh){
@@ -71,22 +59,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.listarPosts();
   }
 
-  /*obterUsuarioLogado(): void {
-    console.log('obterUsuarioLogado');
-    const emailLogado = this.usuarioLogadoService.getEmailUsuarioLogado();
-    console.log('Email Logado: ', emailLogado);
-    this.usuarioService.readOneUsuarioByEmail(emailLogado).subscribe(
-      (usuario: Usuario) => {
-        this.usuarioLogado = usuario;
-      },
-      (error) => {
-        console.error('Erro ao buscar o usuário:', error);
-      }
-    );
-  }*/
 
   async listarPosts(): Promise<void>{
-    //console.log('executado listar post');
     this.postService.readAllPosts().subscribe(
       (posts: Post[]) => {
         this.posts = posts.reverse();
@@ -146,7 +120,6 @@ export class HomeComponent implements OnInit, OnDestroy {
           }).then((result) => {
             if (result.value) {
               this.refreshPage();
-              //this.router.navigate(['home']);
             }
           });
         },
@@ -197,7 +170,6 @@ export class HomeComponent implements OnInit, OnDestroy {
             }).then((result) => {
               if (result.value) {
                 this.refreshPage();
-                //this.router.navigate(['home']);
               }
             });
           },
