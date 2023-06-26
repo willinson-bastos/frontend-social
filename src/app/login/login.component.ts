@@ -27,19 +27,17 @@ export class LoginComponent {
     });
   }
 
-  //  console.log('Email:', email);
-  //  console.log('Senha:', password);
+  
   onSubmit() {
     if (this.form.valid) {
       const { email, password } = this.form.value;
 
-      //console.log('Email:', email);
-      //console.log('Senha:', password);
+      
 
       this.usuarioService.login(email, password).subscribe(
         (response: any) => {
           if (response.statusCode !== 401) {
-            console.log('Login efetuado com sucesso!');//console.log('Login efetuado com sucesso!', response);
+            console.log('Login efetuado com sucesso!');
 
             const usuarioLogado: Usuario = response.user;  // Supondo que a resposta do serviço de login retorne o usuário logado
             console.log(usuarioLogado);
@@ -60,7 +58,7 @@ export class LoginComponent {
                 this.router.navigate(['/home']);
               }
             });
-            //this.router.navigate(['/home']);
+            
           } else {
             console.error('Erro no login.');
             Swal.fire({
